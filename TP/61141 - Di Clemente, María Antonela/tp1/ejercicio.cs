@@ -22,6 +22,7 @@ class Program
         public string email;
     }
     static Contacto[] agenda = new Contacto[10];
+    static int CantidadContactos = 0;
     static int SiguienteId = 1;
 
     static void Main()
