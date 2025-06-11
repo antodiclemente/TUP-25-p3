@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using servidor.Models;
+using servidor.ModeloDatos;
 
-namespace servidor.Data
+namespace servidor.ModeloDatos
 {
-    public class TiendaContext : DbContext
+    public class TiendaContexto : DbContext
     {
-        public TiendaContext(DbContextOptions<TiendaContext> options) : base(options) { }
+        public TiendaContexto(DbContextOptions<TiendaContexto> options) : base(options) { }
 
         public DbSet<Producto> Productos => Set<Producto>();
         public DbSet<Compra> Compras => Set<Compra>();
