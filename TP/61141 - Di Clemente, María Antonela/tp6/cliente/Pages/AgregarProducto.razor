@@ -1,0 +1,37 @@
+@page "/productos/nuevo"
+@using cliente.Services
+@using cliente.Models
+@inject ApiService ApiService
+@inject NavigationManager Navigation
+
+<h3>Agregar Producto</h3>
+
+<EditForm Model="producto" OnValidSubmit="GuardarProducto">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Nombre:</label>
+        <InputText class="form-control" @bind-Value="producto.Nombre" />
+    </div>
+
+    <div class="mb-3">
+        <label>Precio:</label>
+        <InputNumber class="form-control" @bind-Value="producto.Precio" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+</EditForm>
+
+@code {
+    private Producto producto = new();
+
+    private async Task GuardarProducto()
+    {
+        var exito = await ApiService.CrearProductoAsync(producto);
+        if (exito)
+        {
+            Navigation.NavigateTo("/productos");
+        }
+    }
+}

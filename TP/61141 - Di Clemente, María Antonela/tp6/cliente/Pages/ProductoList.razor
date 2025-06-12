@@ -2,8 +2,13 @@
 @using cliente.Models
 @page "/productos"
 @inject ApiService ApiService
+@inject NavigationManager Navigation
+
 
 <h3>Listado de Productos</h3>
+
+<button class="btn btn-success" @onclick="IrANuevoProducto">Agregar producto</button>
+
 
 @if (productos == null)
 {
@@ -42,5 +47,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         productos = await ApiService.ObtenerProductosAsync();
+    }
+
+    void IrANuevoProducto()
+    {
+        Navigation.NavigateTo("/productos/nuevo");
     }
 }

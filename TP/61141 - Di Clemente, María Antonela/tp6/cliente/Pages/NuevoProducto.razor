@@ -1,0 +1,55 @@
+@page "/productos/nuevo"
+@using cliente.Services
+@using cliente.Models
+@inject ApiService ApiService
+@inject NavigationManager Navigation
+
+<h3>Nuevo Producto</h3>
+
+<EditForm Model="producto" OnValidSubmit="GuardarProducto">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <InputText id="nombre" class="form-control" @bind-Value="producto.Nombre" />
+    </div>
+
+    <div class="mb-3">
+        <label for="precio" class="form-label">Precio</label>
+        <InputNumber id="precio" class="form-control" @bind-Value="producto.Precio" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
+</EditForm>
+
+@if (error != null)
+{
+    <div class="alert alert-danger mt-3">@error</div>
+}
+
+@code {
+    Producto producto = new Producto();
+    string error;
+
+    async Task GuardarProducto()
+    {
+        error = null;
+        bool exito = await ApiService.CrearProductoAsync(producto);
+
+        if (exito)
+        {
+            Navigation.NavigateTo("/productoS");
+        }
+        else
+        {
+            error = "Error al guardar el producto, intente nuevamente. " ;
+        }
+    }
+
+    void Cancelar()
+    {
+        Navigation.NavigateTo("/productos");
+    }
+}
