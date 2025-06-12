@@ -1,22 +1,52 @@
 using System.Net.Http.Json;
+using cliente.Modelos;
+
 
 namespace cliente.Services;
 
-public class ApiService {
+public class ApiService
+{
     private readonly HttpClient _httpClient;
 
-    public ApiService(HttpClient httpClient) {
+    public ApiService(HttpClient httpClient)
+    {
         _httpClient = httpClient;
     }
 
-    public async Task<DatosRespuesta> ObtenerDatosAsync() {
-        try {
+    public async Task<DatosRespuesta> ObtenerDatosAsync()
+    {
+        try
+        {
             var response = await _httpClient.GetFromJsonAsync<DatosRespuesta>("/api/datos");
             return response ?? new DatosRespuesta { Mensaje = "No se recibieron datos del servidor", Fecha = DateTime.Now };
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             Console.WriteLine($"Error al obtener datos: {ex.Message}");
             return new DatosRespuesta { Mensaje = $"Error: {ex.Message}", Fecha = DateTime.Now };
         }
+    }
+    public async Task<List<Producto>> ObtenerProductosAsync() {
+        return await _httpClient.GetFromJsonAsync<List<Producto>>("api/productos");
+    }
+
+    public async Task<Producto> ObtenerProductoAsync(int id) {
+        return await _httpClient.GetFromJsonAsync<Producto>($"api/productos/{id}");
+    }
+
+    public async Task<bool> CrearProductoAsync(Producto producto) {
+        var response = await _httpClient.PostAsJsonAsync("api/productos", producto);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> ActualizarProductoAsync(Producto producto) {
+        var response = await _httpClient.PutAsJsonAsync($"api/productos/{producto.Id}", producto);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> EliminarProductoAsync(int id) {
+        var response = await _httpClient.DeleteAsync($"api/productos/{id}");
+        return response.IsSuccessStatusCode;
     }
 }
 
