@@ -3,12 +3,12 @@
 @page "/productos"
 @inject ApiService ApiService
 @inject NavigationManager Navigation
+@inject CarritoService CarritoService
 
 
 <h3>Listado de Productos</h3>
 
 <button class="btn btn-success" @onclick="IrANuevoProducto">Agregar producto</button>
-
 
 @if (productos == null)
 {
@@ -20,25 +20,27 @@ else if (!productos.Any())
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var p in productos)
-            {
-                <tr>
-                    <td>@p.Id</td>
-                    <td>@p.Nombre</td>
-                    <td>@p.Precio.ToString("C")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        @foreach (var p in productos)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@p.ImagenUrl" class="card-img-top" alt="@p.Nombre" />
+                    <div class="card-body">
+                        <h5 class="card-title">@p.Nombre</h5>
+                        <p class="card-text">@p.Descripcion</p>
+                        <p><strong>Precio:</strong> @p.Precio.ToString("C")</p>
+                        <p><strong>Stock:</strong> @p.Stock</p>
+                        <button class="btn btn-primary"
+                                @onclick="() => AgregarAlCarrito(p)"
+                                disabled="@(p.Stock <= 0)">
+                            Agregar al carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @code {
@@ -52,5 +54,13 @@ else
     void IrANuevoProducto()
     {
         Navigation.NavigateTo("/productos/nuevo");
+    }
+
+    void AgregarAlCarrito(Producto producto)
+    {
+        if (producto.Stock > 0)
+        {
+            CarritoService.AgregarProducto(producto);
+        }
     }
 }
