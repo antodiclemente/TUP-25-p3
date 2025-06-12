@@ -15,8 +15,9 @@ builder.Services.AddCors(options => {
 });
 
 // EF Core con SQLite
-builder.Services.AddDbContext<TiendaContexto>(options =>
-    options.UseSqlite("Data Source=tienda.db"));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 
 // Agregar controladores si es necesario

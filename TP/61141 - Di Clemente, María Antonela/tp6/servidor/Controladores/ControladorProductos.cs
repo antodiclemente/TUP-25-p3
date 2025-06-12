@@ -21,6 +21,8 @@ namespace servidor.Controladores
         }
 
         [HttpGet("{id}")]
+
+        
         public ActionResult<Producto> ObtenerPorId(int id)
         {
             var producto = _contexto.Productos.Find(id);
@@ -30,5 +32,14 @@ namespace servidor.Controladores
 
             return Ok(producto);
         }
+        [HttpPost]
+        public ActionResult<Producto> CrearProducto([FromBody] Producto nuevoProducto)
+        {
+        _contexto.Productos.Add(nuevoProducto);
+        _contexto.SaveChanges();
+
+        return CreatedAtAction(nameof(ObtenerPorId), new { id = nuevoProducto.Id }, nuevoProducto);
+        }
+
     }
 }
