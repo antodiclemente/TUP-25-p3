@@ -1,5 +1,6 @@
 using servidor.ModeloDatos;
 using servidor.Datos;
+using servidor.ModeloDatos;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -15,9 +16,8 @@ builder.Services.AddCors(options => {
 });
 
 // EF Core con SQLite
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<TiendaContexto>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
 
 // Agregar controladores si es necesario

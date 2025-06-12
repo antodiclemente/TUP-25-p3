@@ -22,7 +22,7 @@ namespace servidor.Controladores
 
         [HttpGet("{id}")]
 
-        
+
         public ActionResult<Producto> ObtenerPorId(int id)
         {
             var producto = _contexto.Productos.Find(id);
@@ -35,11 +35,43 @@ namespace servidor.Controladores
         [HttpPost]
         public ActionResult<Producto> CrearProducto([FromBody] Producto nuevoProducto)
         {
-        _contexto.Productos.Add(nuevoProducto);
-        _contexto.SaveChanges();
+            _contexto.Productos.Add(nuevoProducto);
+            _contexto.SaveChanges();
 
-        return CreatedAtAction(nameof(ObtenerPorId), new { id = nuevoProducto.Id }, nuevoProducto);
+            return CreatedAtAction(nameof(ObtenerPorId), new { id = nuevoProducto.Id }, nuevoProducto);
         }
+        [HttpPut("{id}")]
+public IActionResult ActualizarProducto(int id, [FromBody] Producto productoActualizado)
+{
+    var productoExistente = _contexto.Productos.Find(id);
 
-    }
+    if (productoExistente == null)
+        return NotFound(new { mensaje = "Producto no encontrado" });
+
+    productoExistente.Nombre = productoActualizado.Nombre;
+    productoExistente.Precio = productoActualizado.Precio;
+    productoExistente.Stock = productoActualizado.Stock;
+    productoExistente.Descripcion = productoActualizado.Descripcion;
+    productoExistente.Categoria = productoActualizado.Categoria;
+
+    _contexto.SaveChanges();
+
+    return NoContent();
+}
+
+[HttpDelete("{id}")]
+public IActionResult EliminarProducto(int id)
+{
+    var producto = _contexto.Productos.Find(id);
+
+    if (producto == null)
+        return NotFound(new { mensaje = "Producto no encontrado" });
+
+    _contexto.Productos.Remove(producto);
+    _contexto.SaveChanges();
+
+    return NoContent();
+}
+
+}
 }

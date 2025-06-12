@@ -12,6 +12,9 @@ public class Producto
     public int Stock { get; set; }
     public string ImagenUrl { get; set; }
 
+    public string Categoria { get; set; }
+
+
     public List<ItemCompra> ItemsCompra { get; set; } = new List<ItemCompra>();
 }    
 
