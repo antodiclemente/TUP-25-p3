@@ -1,0 +1,70 @@
+@using cliente.Services
+@using cliente.Models
+@page "/productos"
+@inject ApiService ApiService
+
+<h3>Lista de Productos</h3>
+
+@if (cargando)
+{
+    <p><em>Cargando productos...</em></p>
+}
+else if (productos != null && productos.Any())
+{
+    <div class="mb-3">
+    <button class="btn btn-success">Agregar producto</button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var producto in productos)
+            {
+                <tr>
+                    <td>@producto.Nombre</td>
+                    <td>@producto.Precio.ToString("C")</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-2">Editar</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => EliminarProducto(producto.Id)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay productos disponibles.</p>
+}
+
+@code {
+    private List<Producto> productos;
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarProductos();
+    }
+
+    private async Task CargarProductos()
+    {
+        cargando = true;
+        productos = await ApiService.ObtenerProductosAsync();
+        cargando = false;
+    }
+
+    private async Task EliminarProducto(int id)
+    {
+        var exito = await ApiService.EliminarProductoAsync(id);
+        if (exito)
+
+            await CargarProductos();
+    }
+
+}
