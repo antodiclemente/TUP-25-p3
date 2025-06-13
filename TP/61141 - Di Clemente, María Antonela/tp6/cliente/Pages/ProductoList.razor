@@ -36,12 +36,17 @@ else
                                 disabled="@(p.Stock <= 0)">
                             Agregar al carrito
                         </button>
+
+                           <button class="btn btn-warning ms-2" @onclick="() => EditarProducto(p.Id)">
+                            Editar
+                        </button>
                     </div>
                 </div>
             </div>
         }
     </div>
 }
+
 
 @code {
     List<Producto> productos;
@@ -62,5 +67,9 @@ else
         {
             CarritoService.AgregarProducto(producto);
         }
+    }
+     void EditarProducto(int id)
+    {
+        Navigation.NavigateTo($"/productos/editar/{id}");
     }
 }
