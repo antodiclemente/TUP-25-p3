@@ -34,10 +34,19 @@ public class ApiService
         return await _httpClient.GetFromJsonAsync<Producto>($"api/productos/{id}");
     }
 
-    public async Task<bool> CrearProductoAsync(Producto producto) {
-        var response = await _httpClient.PostAsJsonAsync("api/productos", producto);
-        return response.IsSuccessStatusCode;
+    public async Task<bool> CrearProductoAsync(Producto producto)
+    {
+    var response = await _httpClient.PostAsJsonAsync("api/productos", producto);
+
+    if (!response.IsSuccessStatusCode)
+    {
+        var errorTexto = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("Error del servidor: " + errorTexto);  // Esto te lo muestra en la consola del navegador (F12)
     }
+
+    return response.IsSuccessStatusCode;
+    }
+
 
     public async Task<bool> ActualizarProductoAsync(Producto producto) {
         var response = await _httpClient.PutAsJsonAsync($"api/productos/{producto.Id}", producto);

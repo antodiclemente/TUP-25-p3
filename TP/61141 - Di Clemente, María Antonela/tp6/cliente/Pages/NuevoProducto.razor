@@ -13,11 +13,37 @@
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
         <InputText id="nombre" class="form-control" @bind-Value="producto.Nombre" />
+        <ValidationMessage For="@(() => producto.Nombre)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <InputTextArea id="descripcion" class="form-control" @bind-Value="producto.Descripcion" />
+        <ValidationMessage For="@(() => producto.Descripcion)" />
     </div>
 
     <div class="mb-3">
         <label for="precio" class="form-label">Precio</label>
         <InputNumber id="precio" class="form-control" @bind-Value="producto.Precio" />
+        <ValidationMessage For="@(() => producto.Precio)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="stock" class="form-label">Stock</label>
+        <InputNumber id="stock" class="form-control" @bind-Value="producto.Stock" />
+        <ValidationMessage For="@(() => producto.Stock)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="imagenUrl" class="form-label">URL de Imagen</label>
+        <InputText id="imagenUrl" class="form-control" @bind-Value="producto.ImagenUrl" />
+        <ValidationMessage For="@(() => producto.ImagenUrl)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="categoria" class="form-label">Categoría</label>
+        <InputText id="categoria" class="form-control" @bind-Value="producto.Categoria" />
+        <ValidationMessage For="@(() => producto.Categoria)" />
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -40,11 +66,11 @@
 
         if (exito)
         {
-            Navigation.NavigateTo("/productoS");
+            Navigation.NavigateTo("/productos");
         }
         else
         {
-            error = "Error al guardar el producto, intente nuevamente. " ;
+            error = "Error al guardar el producto, intente nuevamente.";
         }
     }
 

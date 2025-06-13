@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using servidor.ModeloDatos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace servidor.Controladores
 {
@@ -21,8 +24,6 @@ namespace servidor.Controladores
         }
 
         [HttpGet("{id}")]
-
-
         public ActionResult<Producto> ObtenerPorId(int id)
         {
             var producto = _contexto.Productos.Find(id);
@@ -32,46 +33,62 @@ namespace servidor.Controladores
 
             return Ok(producto);
         }
+
         [HttpPost]
         public ActionResult<Producto> CrearProducto([FromBody] Producto nuevoProducto)
         {
-            _contexto.Productos.Add(nuevoProducto);
+            try
+            {
+                _contexto.Productos.Add(nuevoProducto);
+                _contexto.SaveChanges();
+                return CreatedAtAction(nameof(ObtenerPorId), new { id = nuevoProducto.Id }, nuevoProducto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al guardar producto:");
+                Console.WriteLine(ex.ToString());
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner Exception:");
+                    Console.WriteLine(ex.InnerException.ToString());
+                }
+
+                return BadRequest(new { mensaje = "Error al guardar producto: " + ex.Message });
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult ActualizarProducto(int id, [FromBody] Producto productoActualizado)
+        {
+            var productoExistente = _contexto.Productos.Find(id);
+
+            if (productoExistente == null)
+                return NotFound(new { mensaje = "Producto no encontrado" });
+
+            productoExistente.Nombre = productoActualizado.Nombre;
+            productoExistente.Precio = productoActualizado.Precio;
+            productoExistente.Stock = productoActualizado.Stock;
+            productoExistente.Descripcion = productoActualizado.Descripcion;
+            productoExistente.Categoria = productoActualizado.Categoria;
+
             _contexto.SaveChanges();
 
-            return CreatedAtAction(nameof(ObtenerPorId), new { id = nuevoProducto.Id }, nuevoProducto);
+            return NoContent();
         }
-        [HttpPut("{id}")]
-public IActionResult ActualizarProducto(int id, [FromBody] Producto productoActualizado)
-{
-    var productoExistente = _contexto.Productos.Find(id);
 
-    if (productoExistente == null)
-        return NotFound(new { mensaje = "Producto no encontrado" });
+        [HttpDelete("{id}")]
+        public IActionResult EliminarProducto(int id)
+        {
+            var producto = _contexto.Productos.Find(id);
 
-    productoExistente.Nombre = productoActualizado.Nombre;
-    productoExistente.Precio = productoActualizado.Precio;
-    productoExistente.Stock = productoActualizado.Stock;
-    productoExistente.Descripcion = productoActualizado.Descripcion;
-    productoExistente.Categoria = productoActualizado.Categoria;
+            if (producto == null)
+                return NotFound(new { mensaje = "Producto no encontrado" });
 
-    _contexto.SaveChanges();
+            _contexto.Productos.Remove(producto);
+            _contexto.SaveChanges();
 
-    return NoContent();
-}
-
-[HttpDelete("{id}")]
-public IActionResult EliminarProducto(int id)
-{
-    var producto = _contexto.Productos.Find(id);
-
-    if (producto == null)
-        return NotFound(new { mensaje = "Producto no encontrado" });
-
-    _contexto.Productos.Remove(producto);
-    _contexto.SaveChanges();
-
-    return NoContent();
-}
-
-}
+            return NoContent();
+        }
+    }
 }
