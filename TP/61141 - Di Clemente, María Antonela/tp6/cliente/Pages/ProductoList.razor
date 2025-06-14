@@ -4,6 +4,7 @@
 @inject ApiService ApiService
 @inject NavigationManager Navigation
 @inject CarritoService CarritoService
+@inject IJSRuntime JS
 
 
 <h3>Listado de Productos</h3>
@@ -40,6 +41,11 @@ else
                            <button class="btn btn-warning ms-2" @onclick="() => EditarProducto(p.Id)">
                             Editar
                         </button>
+
+                        <button class="btn btn-danger ms-2" @onclick="() => EliminarProducto(p.Id)">
+                        Eliminar
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -72,4 +78,21 @@ else
     {
         Navigation.NavigateTo($"/productos/editar/{id}");
     }
+    async Task EliminarProducto(int id)
+    {
+    var confirmado = await JS.InvokeAsync<bool>("confirm", $"¿Estás seguro que quiere eliminar el producto con ID {id}?");
+    if (confirmado)
+         {
+        bool exito = await ApiService.EliminarProductoAsync(id);
+        if (exito)
+        {
+            productos = await ApiService.ObtenerProductosAsync();
+        }
+        else
+        {
+            Console.WriteLine("Error al eliminar el producto");
+        }
+        }
+    }
+
 }
