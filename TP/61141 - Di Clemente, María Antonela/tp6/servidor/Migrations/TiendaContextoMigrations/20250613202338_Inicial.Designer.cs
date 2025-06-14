@@ -107,7 +107,7 @@ namespace servidor.Migrations.TiendaContextoMigrations
                             Id = 1,
                             Categoria = "",
                             Descripcion = "Pantalla 6.6'' - 128GB - 4GB RAM",
-                            ImagenUrl = "img/SAMSUNG-A06.jpg",
+                            ImagenUrl = "img/AA06.jpg",
                             Nombre = "Celular Samsung A06",
                             Precio = 280000m,
                             Stock = 15

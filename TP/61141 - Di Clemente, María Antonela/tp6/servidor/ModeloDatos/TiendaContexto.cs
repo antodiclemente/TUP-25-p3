@@ -29,7 +29,7 @@ namespace servidor.ModeloDatos
 
             
             modelBuilder.Entity<Producto>().HasData(
-                new Producto { Id = 1, Nombre = "Celular Samsung A06", Descripcion = "Pantalla 6.6'' - 128GB - 4GB RAM", Precio = 280000, Stock = 15, ImagenUrl = "img/SAMSUNG-A06.jpg" },
+                new Producto { Id = 1, Nombre = "Celular Samsung A06", Descripcion = "Pantalla 6.6'' - 128GB - 4GB RAM", Precio = 280000, Stock = 15, ImagenUrl = "img/AA06.jpg" },
                 new Producto { Id = 2, Nombre = "iPhone 15 Pro Max", Descripcion = "Smartphone de Apple con chip A17 Pro y cámara avanzada", Precio = 1950000, Stock = 30, ImagenUrl = "img/iphone.jpg" },
                 new Producto { Id = 3, Nombre = "Apple MacBook Air M3", Descripcion = "Notebook liviana con procesador Apple Silicon M3", Precio = 2100000, Stock = 15, ImagenUrl = "img/macbook-air.jpg" },
                 new Producto { Id = 4, Nombre = "PlayStation 5 Slim", Descripcion = "Consola de videojuegos de Sony con diseño más delgado", Precio = 950000, Stock = 25, ImagenUrl = "img/PlayStation5.jpg" },

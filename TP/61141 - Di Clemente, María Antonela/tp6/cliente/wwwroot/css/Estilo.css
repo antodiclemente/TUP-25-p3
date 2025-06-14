@@ -1,0 +1,40 @@
+body {
+    background-color: #121212;
+    color: #f5f5f5;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.card, .form-control {
+    background-color: #1e1e1e;
+    border: none;
+    color: #f5f5f5;
+}
+
+.card {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    border-radius: 1rem;
+}
+
+.btn-success, .btn-primary {
+    background-color: #d97706; /* marrón/dorado */
+    border: none;
+}
+
+.btn-success:hover, .btn-primary:hover {
+    background-color: #b45309;
+}
+
+input, select, textarea {
+    background-color: #2b2b2b;
+    color: #fff;
+    border-radius: 10px;
+    border: 1px solid #444;
+}
+
+a {
+    color: #fbbf24;
+}
+
+a:hover {
+    color: #facc15;
+}
