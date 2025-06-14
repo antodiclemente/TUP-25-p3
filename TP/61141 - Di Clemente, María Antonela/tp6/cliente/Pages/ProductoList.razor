@@ -10,6 +10,8 @@
 <h3>Listado de Productos</h3>
 
 <button class="btn btn-success" @onclick="IrANuevoProducto">Agregar producto</button>
+<button class="btn btn-outline-primary ms-2" @onclick="IrAlCarrito">Ver carrito</button>
+
 
 @if (productos == null)
 {
@@ -78,6 +80,7 @@ else
     {
         Navigation.NavigateTo($"/productos/editar/{id}");
     }
+
     async Task EliminarProducto(int id)
     {
     var confirmado = await JS.InvokeAsync<bool>("confirm", $"¿Estás seguro que quiere eliminar el producto con ID {id}?");
@@ -94,5 +97,9 @@ else
         }
         }
     }
+          void IrAlCarrito()
+        {
+        Navigation.NavigateTo("/carrito");
+        }
 
 }

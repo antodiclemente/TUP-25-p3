@@ -19,6 +19,15 @@ namespace cliente.Services
                 Items.Add(new ItemCarrito { Producto = producto, Cantidad = 1 });
             }
         }
+        public void QuitarProducto(Producto producto)
+        {
+            var item = Items.FirstOrDefault(i => i.Producto.Id == producto.Id);
+            if (item != null)
+        {
+            Items.Remove(item);
+        }
+        }
+
 
         public void Vaciar() => Items.Clear();
         public int CantidadTotal() => Items.Sum(i => i.Cantidad);
