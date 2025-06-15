@@ -1,105 +1,108 @@
 @using cliente.Services
 @using cliente.Models
-@page "/productos"
 @inject ApiService ApiService
-@inject NavigationManager Navigation
 @inject CarritoService CarritoService
-@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@page "/productos"
+@using Microsoft.AspNetCore.WebUtilities
+
+<h1 class="barra-superior">
+    <img src="img/logo.jpg" alt="Aura" style="height: 50px; margin-right: 20px;" />
+    <div style="flex-grow:1; font-size: 1.5rem; font-weight: bold;">Aura</div>
+    <button class="boton-principal" @onclick="@(() => Navigation.NavigateTo("/productos/nuevo"))">Agregar producto</button>  <!-- Navega al formulario -->
+    <button class="boton-principal" @onclick="IrCarrito">Carrito</button>   <!-- Navega al carrito -->
+    <button class="boton-principal" @onclick="Buscar">Buscar</button>   <!-- Navega a la busqueda -->
+</h1>
 
 
-<h3>Listado de Productos</h3>
-
-<button class="btn btn-success" @onclick="IrANuevoProducto">Agregar producto</button>
-<button class="btn btn-outline-primary ms-2" @onclick="IrAlCarrito">Ver carrito</button>
-
-
-@if (productos == null)
+@if (cargando)
 {
     <p>Cargando productos...</p>
 }
-else if (!productos.Any())
+else if (productos != null && productos.Any())
 {
-    <p>No hay productos para mostrar.</p>
-}
-else
-{
-    <div class="row">
-        @foreach (var p in productos)
+    <div class="grid-productos">
+        @foreach (var producto in productos)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="@p.ImagenUrl" class="card-img-top" alt="@p.Nombre" />
-                    <div class="card-body">
-                        <h5 class="card-title">@p.Nombre</h5>
-                        <p class="card-text">@p.Descripcion</p>
-                        <p><strong>Precio:</strong> @p.Precio.ToString("C")</p>
-                        <p><strong>Stock:</strong> @p.Stock</p>
-                        <button class="btn btn-primary"
-                                @onclick="() => AgregarAlCarrito(p)"
-                                disabled="@(p.Stock <= 0)">
-                            Agregar al carrito
-                        </button>
-
-                           <button class="btn btn-warning ms-2" @onclick="() => EditarProducto(p.Id)">
-                            Editar
-                        </button>
-
-                        <button class="btn btn-danger ms-2" @onclick="() => EliminarProducto(p.Id)">
-                        Eliminar
-                        </button>
-
-                    </div>
+            <div class="tarjeta-producto">
+                <img src="@producto.ImagenUrl" alt="@producto.Nombre" />
+                <h4>@producto.Nombre</h4>
+                <p class="descripcion">@producto.Descripcion</p>
+                <p>@producto.Precio.ToString("C")</p>
+                <button class="btn-dorado" @onclick="() => AgregarAlCarrito(producto)">Agregar al carrito</button>
+                <div style="margin-top:15px; display:flex; justify-content:center; gap: 12px;">
+                    <button class="btn-editar" @onclick="() => EditarProducto(producto.Id)">Editar</button>
+                    <button class="btn-eliminar" @onclick="() => EliminarProducto(producto.Id)">Eliminar</button>
                 </div>
             </div>
         }
     </div>
 }
+else
+{
+    <p>No hay productos disponibles.</p>
+}
 
+@if (mostrarMensaje)
+{
+    <div class="mensaje-compra">
+        ¡Compra realizada con éxito!
+    </div>
+}
 
 @code {
-    List<Producto> productos;
+    private List<Producto> productos;
+    private bool cargando = true;
 
     protected override async Task OnInitializedAsync()
     {
+        await CargarProductos();
+    }
+
+    private async Task CargarProductos()
+    {
+        cargando = true;
         productos = await ApiService.ObtenerProductosAsync();
+        cargando = false;
     }
 
-    void IrANuevoProducto()
+    private void AgregarAlCarrito(Producto producto)
     {
-        Navigation.NavigateTo("/productos/nuevo");
+        CarritoService.AgregarProducto(producto);
     }
 
-    void AgregarAlCarrito(Producto producto)
-    {
-        if (producto.Stock > 0)
-        {
-            CarritoService.AgregarProducto(producto);
-        }
-    }
-     void EditarProducto(int id)
+    private void EditarProducto(int id)
     {
         Navigation.NavigateTo($"/productos/editar/{id}");
     }
 
-    async Task EliminarProducto(int id)
+    private async Task EliminarProducto(int id)
     {
-    var confirmado = await JS.InvokeAsync<bool>("confirm", $"¿Estás seguro que quiere eliminar el producto con ID {id}?");
-    if (confirmado)
-         {
-        bool exito = await ApiService.EliminarProductoAsync(id);
+        var exito = await ApiService.EliminarProductoAsync(id);
         if (exito)
         {
-            productos = await ApiService.ObtenerProductosAsync();
-        }
-        else
-        {
-            Console.WriteLine("Error al eliminar el producto");
-        }
+            await CargarProductos();
         }
     }
-          void IrAlCarrito()
-        {
+
+    private void IrCarrito()
+    {
         Navigation.NavigateTo("/carrito");
-        }
+    }
+
+    private void Buscar()
+    {
+        Navigation.NavigateTo("/productos/buscar");
+    }
+    private bool mostrarMensaje = false;
+
+    protected override void OnInitialized()
+    {
+    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+    if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("compraExitosa", out var valor))
+    {
+        mostrarMensaje = valor == "true";
+    }
+}
 
 }

@@ -16,11 +16,13 @@
 }
 else
 {
+     // Muestra resumen del total
     <div>
         <p><strong>Total de ítems:</strong> @CantidadTotal</p>
         <p><strong>Importe total:</strong> @Total.ToString("C")</p>
     </div>
-
+    
+    // Formulario de confirmación con validaciones
     <EditForm Model="cliente" OnValidSubmit="ProcesarCompra">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -56,10 +58,10 @@ else
     ClienteCompra cliente = new ClienteCompra();
 
     string mensajeError;
+       
+    int CantidadTotal => CarritoService.CantidadTotal();     // Calcula cantidad total de ítems
 
-    int CantidadTotal => CarritoService.CantidadTotal();
-
-    decimal Total => CarritoService.Total();
+    decimal Total => CarritoService.Total();      // Calcula importe total
 
     void VolverAlCatalogo()
     {
@@ -78,7 +80,7 @@ else
         try
         {
             LimpiarCarrito();
-            Navigation.NavigateTo("/productos/lista?compraExitosa=true");
+            Navigation.NavigateTo("/productos?compraExitosa=true");
 
         }
         catch (Exception ex)
@@ -87,6 +89,8 @@ else
         }
     }
 
+
+    // Modelo del cliente con validaciones
     public class ClienteCompra
     {
         [Required(ErrorMessage = "El nombre es obligatorio")]

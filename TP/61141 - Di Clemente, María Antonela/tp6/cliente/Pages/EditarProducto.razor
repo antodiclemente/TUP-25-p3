@@ -16,10 +16,13 @@ else if (producto == null)
 }
 else
 {
+     // Formulario con validaciones para editar el producto
     <EditForm Model="producto" OnValidSubmit="ActualizarProducto">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
+    
+        <!-- Campos del formulario -->
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
             <InputText id="nombre" class="form-control" @bind-Value="producto.Nombre" />
@@ -68,13 +71,13 @@ else
 
 @code {
     [Parameter]
-    public int id { get; set; }
+    public int id { get; set; }      // id recibido desde la URL
 
     Producto producto;
     string error;
     bool cargando = true;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()       // Al iniciar, busca el producto por id
     {
         try
         {
@@ -90,6 +93,7 @@ else
         }
     }
 
+   // Llama al API para actualizar el producto
     async Task ActualizarProducto()
     {
         error = null;

@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Net.Http;
 using cliente.Models;
 
 namespace cliente.Services
@@ -11,6 +12,18 @@ namespace cliente.Services
         {
             _httpClient = httpClient;
         }
+
+        /*public async Task AgregarAlCarritoAsync(Producto producto)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/carrito", producto);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorTexto = await response.Content.ReadAsStringAsync();
+                throw new Exception($"No se pudo agregar el producto al carrito: {errorTexto}");
+            }
+        }
+*/
 
         public async Task<DatosRespuesta> ObtenerDatosAsync()
         {
@@ -31,7 +44,6 @@ namespace cliente.Services
             return await _httpClient.GetFromJsonAsync<List<Producto>>("api/productos");
         }
 
-        // Método corregido para obtener un producto por id
         public async Task<Producto> ObtenerProductoPorIdAsync(int id)
         {
             try
@@ -51,7 +63,7 @@ namespace cliente.Services
             if (!response.IsSuccessStatusCode)
             {
                 var errorTexto = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("Error del servidor: " + errorTexto);  
+                Console.WriteLine("Error del servidor: " + errorTexto);
             }
 
             return response.IsSuccessStatusCode;

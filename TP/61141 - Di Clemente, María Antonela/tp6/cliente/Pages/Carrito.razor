@@ -48,7 +48,7 @@ else
         </tfoot>
     </table>
 
-<button class="btn btn-primary me-2" @onclick="IrAConfirmarCompra">
+<button class="btn-dorado" @onclick="ConfirmarCompra">
     Confirmar compra
 </button>
 
@@ -63,6 +63,7 @@ else
         CarritoService.QuitarProducto(producto);
     }
 
+    // Vacía el carrito y recarga la página
     void FinalizarCompra()
     {
         CarritoService.Vaciar();
@@ -72,4 +73,10 @@ else
     {
     Navigation.NavigateTo("/confirmar-compra");
     }
+        // Redirige a la página de confirmación de compra
+    private void ConfirmarCompra()
+    {
+    Navigation.NavigateTo("/confirmar-compra");
+    }
+
 }

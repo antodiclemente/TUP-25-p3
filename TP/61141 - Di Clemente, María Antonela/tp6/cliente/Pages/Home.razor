@@ -11,18 +11,22 @@
         </div>
     </div>
     
+        <!-- Botón para obtener datos y link a productos -->
     <div class="row mb-4">
         <div class="col-12">
             <button class="btn btn-primary" @onclick="ObtenerDatosDelServidor">Obtener datos del servidor</button>
         </div>
+
+        
+        <!-- Botón de navegación a la página de productos -->
         <div class="col-12 mt-3">
         <NavLink class="btn btn-secondary" href="/productos">    
         <span class="oi oi-list-rich" aria-hidden="true"></span> Ir a Productos
     </NavLink>
 </div>
+ </div>
 
-    </div>
-
+    <!-- Sección de respuesta o mensajes -->
     <div class="row">
         <div class="col-12">            
             @if (cargando) {
@@ -50,11 +54,12 @@
     private string error;
     private bool cargando = false;
 
+    // Llama al API para obtener datos del servidor
     private async Task ObtenerDatosDelServidor() {
         try {
             cargando = true;
             error = null;
-            datos = await ApiService.ObtenerDatosAsync();
+            datos = await ApiService.ObtenerDatosAsync();    // Llama al backend
         } catch (Exception ex) {
             error = ex.Message;
             datos = null;

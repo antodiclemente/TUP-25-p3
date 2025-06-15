@@ -81,7 +81,7 @@ namespace servidor.Migrations.TiendaContextoMigrations
                 columns: new[] { "Id", "Categoria", "Descripcion", "ImagenUrl", "Nombre", "Precio", "Stock" },
                 values: new object[,]
                 {
-                    { 1, "", "Pantalla 6.6'' - 128GB - 4GB RAM", "img/AA06.jpg", "Samsung A06", 280000m, 15 },
+                    { 1, "", "Pantalla 6.6'' - 128GB - 4GB RAM", "img/a.jpg", "Samsung A06", 280000m, 15 },
                     { 2, "", "Smartphone de Apple con chip A17 Pro y cámara avanzada", "img/iphone.jpg", "iPhone 15 Pro Max", 1950000m, 30 },
                     { 3, "", "Notebook liviana con procesador Apple Silicon M3", "img/macbook-air.jpg", "Apple MacBook Air M3", 2100000m, 15 },
                     { 4, "", "Consola de videojuegos de Sony con diseño más delgado", "img/PlayStation5.jpg", "PlayStation 5 Slim", 950000m, 25 },

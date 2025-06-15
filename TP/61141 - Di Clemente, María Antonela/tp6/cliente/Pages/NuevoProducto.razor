@@ -6,10 +6,12 @@
 
 <h3>Nuevo Producto</h3>
 
+<!-- Formulario de edición con validaciones -->
 <EditForm Model="producto" OnValidSubmit="GuardarProducto">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
+<!-- campos a rellenar-->
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
         <InputText id="nombre" class="form-control" @bind-Value="producto.Nombre" />
@@ -56,13 +58,15 @@
 }
 
 @code {
+    // Modelo del producto que se va a crear
     Producto producto = new Producto();
     string error;
 
+    // Método que se llama al enviar el formulario
     async Task GuardarProducto()
     {
         error = null;
-        bool exito = await ApiService.CrearProductoAsync(producto);
+        bool exito = await ApiService.CrearProductoAsync(producto);       // Llama a la API para guardar
 
         if (exito)
         {
